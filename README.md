@@ -15,7 +15,7 @@
 <div align="center">
 
 <div style="display:flex; align-items:center; gap:6px;">
-  <span>技术支持 yumi :</span>
+  <span>技术支持 yumiai :</span>
   <a href="https://yumi.chat:3000/">
     <img src="https://yumi.chat:3000/logo.png" width="50">
   </a>
