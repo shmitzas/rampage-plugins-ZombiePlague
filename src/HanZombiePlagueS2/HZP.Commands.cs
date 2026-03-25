@@ -145,7 +145,8 @@ public class HZPCommands
         if (player == null || !player.IsValid)
             return HookResult.Continue;
 
-        if (!player.IsFakeClient)
+        _globals.IsZombie.TryGetValue(player.PlayerID, out bool IsZombie);
+        if (!player.IsFakeClient && !IsZombie)
         {
             if (commandLine.StartsWith("jointeam 2"))
             {
