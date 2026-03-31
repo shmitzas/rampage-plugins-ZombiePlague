@@ -1191,40 +1191,26 @@ public partial class HZPHelpers
         if (pawn.LifeState != (byte)LifeState_t.LIFE_ALIVE)
             return;
 
-        var originalMoveType = pawn.ActualMoveType;
-
-        // 参考 CS2Fixes：只对正常可行走状态做修复
-        if ((int)originalMoveType < (int)MoveType_t.MOVETYPE_WALK)
-            return;
-
-        var pawnHandle = _core.EntitySystem.GetRefEHandle(pawn);
-        if (!pawnHandle.IsValid)
-            return;
-
         var originalVelocity = pawn.AbsVelocity;
 
-        // CS2Fixes 这里用的是 MOVETYPE_OBSOLETE。
-        var tempMoveType = MoveType_t.MOVETYPE_OBSOLETE;
-
         pawn.Teleport(null, null, new Vector(0, 0, 0));
-        pawn.MoveType = tempMoveType;
-        pawn.ActualMoveType = tempMoveType;
+        pawn.MoveType = MoveType_t.MOVETYPE_OBSOLETE;
+        pawn.ActualMoveType = MoveType_t.MOVETYPE_OBSOLETE;
         pawn.MoveTypeUpdated();
 
         _core.Scheduler.DelayBySeconds(0.02f, () =>
         {
-            if (!pawnHandle.IsValid || pawnHandle.Value == null || !pawnHandle.Value.IsValid)
+            if (pawn == null || !pawn.IsValid)
                 return;
 
-            var currentPawn = pawnHandle.Value;
-            if (currentPawn.LifeState != (byte)LifeState_t.LIFE_ALIVE)
+            if (pawn.LifeState != (byte)LifeState_t.LIFE_ALIVE)
                 return;
 
-            currentPawn.MoveType = MoveType_t.MOVETYPE_WALK;
-            currentPawn.ActualMoveType = MoveType_t.MOVETYPE_WALK;
-            currentPawn.MoveTypeUpdated();
+            pawn.MoveType = MoveType_t.MOVETYPE_WALK;
+            pawn.ActualMoveType = MoveType_t.MOVETYPE_WALK;
+            pawn.MoveTypeUpdated();
 
-            currentPawn.Teleport(null, null, originalVelocity);
+            pawn.Teleport(null, null, originalVelocity);
         });
     }
 
